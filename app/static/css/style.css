@@ -1,25 +1,39 @@
-/* style.css */
-/* Основные цвета Discord */
+/* Основные стили */
 .discord-theme {
     background-color: #36393f;
     min-height: 100vh;
 }
 
+/* Шапка */
+.main-header {
+    background-color: #2f3136;
+    border-bottom: 1px solid #202225;
+    padding: 15px 0;
+}
+
+.site-title {
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* Боковая панель */
 .sidebar {
     background-color: #2f3136;
+    width: 220px;
     min-height: 100vh;
-    width: 240px;
     border-right: 1px solid #202225;
-    padding: 20px 0;
+    padding: 15px 0;
 }
 
 .channel {
     color: #b9bbbe;
-    padding: 12px 25px;
-    margin: 5px 0;
-    transition: 0.3s;
+    padding: 8px 20px;
+    margin: 3px 0;
+    font-size: 0.88rem;
     border-radius: 4px;
-    font-size: 0.95rem;
+    transition: 0.3s;
 }
 
 .channel:hover {
@@ -28,9 +42,43 @@
     cursor: pointer;
 }
 
-/* Welcome-блок */
+/* Секции фильтров */
+.filters-section {
+    padding: 15px 20px;
+    border-top: 1px solid #40444b;
+}
+
+.filters-section h4 {
+    color: #dcddde !important;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+/* Элементы форм */
+.form-check {
+    margin-bottom: 6px;
+}
+
+.form-check-label {
+    color: #b9bbbe !important;
+    font-size: 0.85rem;
+}
+
+.form-check-input {
+    background-color: #40444b;
+    border-color: #72767d;
+    margin-top: 3px;
+}
+
+.form-check-input:checked {
+    background-color: #5865f2;
+    border-color: #5865f2;
+}
+
+/* Приветственный блок */
 .welcome-header {
-    margin: 100px auto 40px;
+    margin: 50px auto 40px;
     max-width: 600px;
     padding: 30px;
     background: rgba(0, 0, 0, 0.2);
@@ -53,42 +101,58 @@
     font-weight: 300;
 }
 
-/* Фильтры */
-.filters-section {
-    border-top: 1px solid #40444b;
-    padding: 20px 25px;
+/* Кнопки авторизации */
+.auth-btn {
+    padding: 8px 25px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-left: 15px;
+    border: 1px solid transparent;
 }
 
-.filters-section h4 {
-    color: #dcddde !important;
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-bottom: 15px;
+.login-btn {
+    background-color: #5865f2;
+    color: white !important;
 }
 
-.form-check-label {
+.login-btn:hover {
+    background-color: #4752c4;
+}
+
+.register-btn {
+    background-color: #40444b;
     color: #b9bbbe !important;
-    font-size: 0.9rem;
+    border-color: #72767d;
 }
 
-/* Иконки категорий */
-.nav-link::before {
-    margin-right: 12px;
-    font-size: 1.1em;
+.register-btn:hover {
+    background-color: #36393f;
+    border-color: #b9bbbe;
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+        padding: 10px 0;
+    }
+
     .welcome-title {
         font-size: 2.2rem;
     }
 
-    .sidebar {
-        width: 200px;
-        padding: 15px 0;
+    .site-title {
+        font-size: 1.8rem;
+    }
+
+    .auth-btn {
+        padding: 6px 15px;
+        margin-left: 10px;
     }
 
     .channel {
-        padding: 10px 20px;
+        padding: 6px 15px;
     }
 }
