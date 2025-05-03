@@ -1,1 +1,68 @@
-<!-- Базовый шаблон с навигацией -->
+<!-- Сайт с навигацией -->
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">-->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="discord-theme">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Левая панель (категории и фильтры) -->
+            <nav class="col-md-2 sidebar">
+                <div class="sidebar-header p-3">
+                    <h3 class="text-white">🎵 Категории</h3>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item channel">
+                        <span class="nav-link">🎨 Рисунки</span>
+                    </li>
+                    <li class="nav-item channel">
+                        <span class="nav-link">🎬 Здиты</span>
+                    </li>
+                    <li class="nav-item channel">
+                        <span class="nav-link">📖 История</span>
+                    </li>
+                    <li class="nav-item channel">
+                        <span class="nav-link">🛠 Подделки</span>
+                    </li>
+                    <li class="nav-item channel">
+                        <span class="nav-link">📊 Опросы</span>
+                    </li>
+                </ul>
+
+                <!-- Фильтры -->
+                <div class="filters-section p-3 mt-4">
+                    <h4 class="text-white mb-3">Фильтры</h4>
+                    <div class="form-check text-white">
+                        <input class="form-check-input" type="checkbox" id="filter1">
+                        <label class="form-check-label" for="filter1">Новые</label>
+                    </div>
+                    <div class="form-check text-white">
+                        <input class="form-check-input" type="checkbox" id="filter2">
+                        <label class="form-check-label" for="filter2">Популярные</label>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Правая сторона (контент) -->
+            <div class="col-md-10 main-content">
+                <!-- Welcome-блок -->
+                <div class="welcome-header text-center py-5">
+                    <h2 class="welcome-title">Добро пожаловать на MusicHub</h2>
+                    <p class="welcome-subtitle">Ваша платформа для творческого самовыражения</p>
+                </div>
+
+                <!-- Будущие посты -->
+                <div class="posts-container p-4">
+                    <!-- Здесь будут посты -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
