@@ -1,1 +1,42 @@
-<!-- Страница входа -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в систему</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/log_style.css') }}">
+</head>
+<body class="discord-bg">
+    <div class="container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="auth-container discord-container">
+            <div class="welcome-text discord-text">
+                <h2 class="mb-3">С возвращением!</h2>
+                <p>Мы рады снова вас видеть!</p>
+            </div>
+
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="email" class="form-label discord-label">Email</label>
+                    <input type="email" class="form-control discord-input" id="email" name="email" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label discord-label">Пароль</label>
+                    <input type="password" class="form-control discord-input" id="password" name="password" required>
+                </div>
+
+                <div class="d-grid mb-3">
+                    <button type="submit" class="btn discord-btn btn-lg">Войти</button>
+                </div>
+
+                <div class="text-center discord-links">
+                    <p>Нужен аккаунт? <a href="/register" class="auth-btn register-btn">Регистрация</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

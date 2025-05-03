@@ -1,0 +1,68 @@
+/* Основные цвета Discord */
+:root {
+    --discord-bg: #36393f;
+    --discord-container: #40444b;
+    --discord-text: #dcddde;
+    --discord-accent: #7289da;
+    --discord-hover: #677bc4;
+    --discord-border: #202225;
+}
+
+.discord-bg {
+    background-color: var(--discord-bg);
+    min-height: 100vh;
+}
+
+.discord-container {
+    background-color: var(--discord-container);
+    border: 1px solid var(--discord-border);
+    color: var(--discord-text);
+}
+
+.discord-text h2,
+.discord-text p {
+    color: var(--discord-text) !important;
+}
+
+.discord-label {
+    color: var(--discord-text) !important;
+}
+
+.discord-input {
+    background-color: var(--discord-bg) !important;
+    border: 1px solid var(--discord-border) !important;
+    color: var(--discord-text) !important;
+}
+
+.discord-btn {
+    background-color: var(--discord-accent) !important;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.discord-btn:hover {
+    background-color: var(--discord-hover) !important;
+}
+
+.discord-links p {
+    color: var(--discord-text) !important;
+    cursor: pointer;
+}
+
+.discord-hr {
+    border-color: var(--discord-border);
+}
+
+/* Адаптивный контейнер */
+.auth-container {
+    max-width: 480px;
+    width: 100%;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.welcome-text {
+    text-align: center;
+    margin-bottom: 2rem;
+}
