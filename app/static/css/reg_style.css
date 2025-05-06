@@ -118,3 +118,9 @@ h1 {
 .category-card:hover {
     background: #36393f;
 }
+
+.category-checkbox:focus + .category-card,
+.category-checkbox:active + .category-card {
+    outline: none;
+    border: 2px solid #36393f;
+}

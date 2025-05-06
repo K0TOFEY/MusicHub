@@ -12,28 +12,58 @@
         {% if step == 1 %}
             <!-- Шаг 1: Основные данные -->
             <h1>Создайте аккаунт</h1>
-            <form method="POST" action="/register">
+            <form method="POST" action=""> <!-- Убираем /register из action -->
+                {{ form.hidden_tag() }}  <!-- Добавляем CSRF-токен -->
+
                 <div class="input-group">
-                    <label>Эл. почта</label>
-                    <input type="email" name="email" required>
+                    <label for="{{ form.email.id }}">Эл. почта</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <ul class="errors">
+                            {% for error in form.email.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
 
                 <div class="input-group">
-                    <label>Имя пользователя</label>
-                    <input type="text" name="username" required>
+                    <label for="{{ form.username.id }}">Имя пользователя</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <ul class="errors">
+                            {% for error in form.username.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
 
                 <div class="input-group">
-                    <label>Пароль</label>
-                    <input type="password" name="password" required>
+                    <label for="{{ form.password.id }}">Пароль</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <ul class="errors">
+                            {% for error in form.password.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
 
                 <div class="input-group">
-                    <label>Подтвердите пароль</label>
-                    <input type="password" name="confirm_password" required>
+                    <label for="{{ form.password2.id }}">Подтвердите пароль</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <ul class="errors">
+                            {% for error in form.password2.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
 
-                <button type="submit" class="discord-btn">Продолжить</button>
+                <button type="submit" name="submit_personal" class="discord-btn">Продолжить</button>
 
                 <div class="text-center discord-links">
                     <br>
@@ -44,14 +74,13 @@
         {% elif step == 2 %}
             <!-- Шаг 2: Выбор категорий -->
             <h1>Выберите ваше направление</h1>
-            <form method="POST" action="/register">
+            <form method="POST" action=""> <!-- Убираем /register из action -->
+                {{ form.hidden_tag() }}  <!-- Добавляем CSRF-токен -->
                 <div class="category-grid">
-                    {% for category in categories %}
+                    {% for tag in form.tags %}
                     <div class="category-item">
-                        <input type="checkbox" name="categories" value="{{ category }}" id="category{{ loop.index }}" class="category-checkbox">
-                        <label for="category{{ loop.index }}" class="category-card">
-                            {{ category }}
-                        </label>
+                        {{ tag.label(class_="category-card") }}
+                        {{ tag(class_="category-checkbox") }}
                     </div>
                     {% endfor %}
                 </div>

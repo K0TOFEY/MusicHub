@@ -16,14 +16,35 @@
             </div>
 
             <form method="POST">
+                {{ form.hidden_tag() }}  <!-- Добавляем CSRF-токен -->
+
                 <div class="mb-3">
-                    <label for="email" class="form-label discord-label">Email</label>
-                    <input type="email" class="form-control discord-input" id="email" name="email" required>
+                    <label for="{{ form.email.id }}" class="form-label discord-label">Email</label>
+                    {{ form.email(class="form-control discord-input", id="email") }}
+                    {% if form.email.errors %}
+                        <ul class="errors">
+                            {% for error in form.email.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
 
                 <div class="mb-4">
-                    <label for="password" class="form-label discord-label">Пароль</label>
-                    <input type="password" class="form-control discord-input" id="password" name="password" required>
+                    <label for="{{ form.password.id }}" class="form-label discord-label">Пароль</label>
+                    {{ form.password(class="form-control discord-input", id="password") }}
+                    {% if form.password.errors %}
+                        <ul class="errors">
+                            {% for error in form.password.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form.remember_me(class="form-check-input", id="rememberMe") }}
+                    <label class="form-check-label discord-label" for="rememberMe">Запомнить меня</label>
                 </div>
 
                 <div class="d-grid mb-3">
@@ -31,7 +52,7 @@
                 </div>
 
                 <div class="text-center discord-links">
-                    <p>Нужен аккаунт? <a href="/register" class="auth-btn register-btn">Регистрация</a></p>
+                    <p>Нужен аккаунт? <a href="{{ url_for('register') }}" class="auth-btn register-btn">Регистрация</a></p>
                 </div>
             </form>
         </div>

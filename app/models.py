@@ -40,4 +40,4 @@ class UserTag(db.Model):
     tag = db.relationship('Tag', backref=db.backref('user_tags', lazy=True))
 
     def __repr__(self):
-        return f'<UserTag User: {self.user_id}, Tag: {self.tag_id}'
+        return f'<UserTag User: {self.user_id}, Tag: {self.tag_id}>'
