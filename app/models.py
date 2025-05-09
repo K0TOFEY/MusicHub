@@ -9,6 +9,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    tags = db.relationship('Tag', secondary='user_tag', backref=db.backref('users', lazy='dynamic'))
 
     # Доп. поля для профиля
     avatar = db.Column(db.String(256))

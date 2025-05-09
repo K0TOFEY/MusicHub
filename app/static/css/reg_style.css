@@ -124,3 +124,68 @@ h1 {
     outline: none;
     border: 2px solid #36393f;
 }
+
+.category-card {
+    border: 2px solid transparent;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.category-card.selected {
+    border-color: #7289da; /* Цвет обводки */
+}
+
+/* Добавьте в reg_style.css */
+.input-group input.error {
+    border: 1px solid #dc3545 !important;
+}
+
+.errors {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+/* Скрываем настоящий чекбокс */
+.hidden-checkbox {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+/* Стили для карточки тега */
+.category-card {
+    background: #40444b;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    text-align: center;
+}
+
+/* Эффект при наведении */
+.category-card:hover {
+    background: #36393f;
+    transform: translateY(-2px);
+}
+
+/* Стиль для выбранного тега */
+.hidden-checkbox:checked + .category-card {
+    border-color: #7289da;
+    box-shadow: 0 0 0 2px rgba(114, 137, 218, 0.3);
+    background: #36393f;
+}
+
+/* Анимация при выборе */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(114, 137, 218, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(114, 137, 218, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(114, 137, 218, 0); }
+}
+
+.hidden-checkbox:checked + .category-card {
+    animation: pulse 0.5s ease-out;
+}

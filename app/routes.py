@@ -1,54 +1,86 @@
 from flask import render_template, redirect, url_for, flash, request, session
 from app import app, db
 from app.forms import RegistrationFormPersonal, RegistrationFormTags, LoginForm
-from app.models import User, Tag
+from app.models import User, Tag, UserTag
 from werkzeug.security import generate_password_hash
 from flask_login import current_user, login_user, logout_user, login_required
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form_personal = RegistrationFormPersonal(prefix="personal")
     form_tags = RegistrationFormTags(prefix="tags")
 
-    # Загружаем теги из БД, чтобы отобразить в форме
+    # Заполняем choices для form_tags здесь, чтобы они были доступны при первом рендеринге и при повторной отправке формы
     form_tags.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
 
     if request.method == 'POST':
-        if 'submit_personal' in request.form and form_personal.validate_on_submit():
-            print(form_personal.errors)
-            session['username'] = form_personal.username.data
-            session['email'] = form_personal.email.data
-            session['password'] = form_personal.password.data
-            return render_template('register.html', form=form_tags, step=2)
+        if 'submit_personal' in request.form:
+            if form_personal.validate_on_submit():
+                session['username'] = form_personal.username.data
+                session['email'] = form_personal.email.data
+                session['password'] = form_personal.password.data
+                return render_template('register.html', form=form_tags, step=2)
+            else:
+                flash('Исправьте ошибки в форме', 'error')
 
-        if 'submit_tags' in request.form and form_tags.validate_on_submit():
-            username = session.get('username')
-            email = session.get('email')
-            password = session.get('password')
+        elif 'submit_tags' in request.form:
+            # Создаем новую форму на основе данных запроса
+            form_tags = RegistrationFormTags(request.form, prefix="tags")
+            form_tags.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]  # <-- Убедитесь, что это здесь
 
-            if not username or not email or not password:
-                flash('Пожалуйста, заполните личные данные.', 'error')
-                return redirect(url_for('register'))
+            if request.form.getlist('tags'):
+                selected_tag_ids = request.form.getlist('tags')
+                selected_tag_names = []
 
-            user = User(username=username, email=email)
-            user.set_password(password)
-            db.session.add(user)
-            db.session.commit()
+                # Получаем названия тегов на основе их ID
+                for tag_id in selected_tag_ids:
+                    try:
+                        tag_id = int(tag_id)
+                        tag = Tag.query.get(tag_id)
+                        if tag:
+                            selected_tag_names.append(tag.name)
+                        else:
+                            flash(f'Тег с ID {tag_id} не найден', 'error')
+                            return render_template('register.html', form=form_tags, step=2)
+                    except ValueError:
+                        flash(f'Некорректный ID тега: {tag_id}', 'error')
+                        return render_template('register.html', form=form_tags, step=2)
 
-            selected_tags = form_tags.tags.data
+                print(f"Выбранные теги: {selected_tag_names}")  # Выводим список названий тегов
 
-            for tag_id in selected_tags:
-                tag = Tag.query.get(tag_id)
-                if tag:
-                    user.tags.append(tag)
+                user = User(
+                    username=session.get('username'),
+                    email=session.get('email')
+                )
+                user.set_password(session.get('password'))
+                db.session.add(user)
+                db.session.commit()
 
-            db.session.commit()
+                # Добавляем выбранные теги
+                for tag_id in selected_tag_ids:
+                    # Проверка, что tag_id является целым числом
+                    try:
+                        tag_id = int(tag_id)
+                    except ValueError:
+                        flash(f'Некорректный ID тега: {tag_id}', 'error')
+                        return render_template('register.html', form=form_tags, step=2)
+                    # Проверка, что тег с таким ID существует в БД
+                    tag = Tag.query.get(tag_id)
+                    if tag:
+                        user_tag = UserTag(user_id=user.id, tag_id=tag_id)
+                        db.session.add(user_tag)
+                    else:
+                        flash(f'Тег с ID {tag_id} не найден', 'error')
+                        return render_template('register.html', form=form_tags, step=2)
+                db.session.commit()
 
-            flash('Регистрация прошла успешно! Теперь вы можете войти.', 'success')
-            return redirect(url_for('login'))
+                flash('Регистрация успешна!', 'success')
+                return redirect(url_for('index'))
+            else:
+                flash('Выберите хотя бы один тег', 'error')
 
-    return render_template('register.html', form=form_personal, step=1)
-
+    return render_template('register.html', form=form_personal, form_tags=form_tags, step=1)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

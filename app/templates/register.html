@@ -72,21 +72,32 @@
                 </div>
             </form>
         {% elif step == 2 %}
-            <!-- Шаг 2: Выбор категорий -->
-            <h1>Выберите ваше направление</h1>
-            <form method="POST" action=""> <!-- Убираем /register из action -->
-                {{ form.hidden_tag() }}  <!-- Добавляем CSRF-токен -->
-                <div class="category-grid">
-                    {% for tag in form.tags %}
+        <!-- Шаг 2: Выбор категорий -->
+        <h1>Выберите ваше направление</h1>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <div class="category-grid">
+                {% for tag in form.tags.choices %}
                     <div class="category-item">
-                        {{ tag.label(class_="category-card") }}
-                        {{ tag(class_="category-checkbox") }}
+                        <input type="checkbox" id="tag_{{ tag[0] }}" name="tags" value="{{ tag[0] }}" class="hidden-checkbox" {% if tag[0] in form.tags.data %} checked {% endif %}>
+                        <label for="tag_{{ tag[0] }}" class="category-card">
+                            {{ tag[1] }}
+                        </label>
                     </div>
-                    {% endfor %}
-                </div>
-                <button type="submit" class="discord-btn">Завершить</button>
-            </form>
+                {% endfor %}
+            </div>
+            <button type="submit" name="submit_tags" class="discord-btn">Завершить</button>
+        </form>
         {% endif %}
     </div>
+
+    <script>
+        document.querySelectorAll('.category-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const card = this.closest('.category-item').querySelector('.category-card');
+                card.classList.toggle('selected', this.checked);
+            });
+        });
+</script>
 </body>
 </html>
