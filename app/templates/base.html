@@ -8,6 +8,24 @@
     <title>MusicHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+    .discord-btn.primary {
+        background-color: #5865F2 !important;
+        color: white !important;
+        transition: all 0.2s ease;
+        border: none;
+    }
+
+    .discord-btn.primary:hover {
+        background-color: #4752C4 !important;
+        transform: translateY(-1px);
+    }
+
+    .discord-btn.primary:active {
+        background-color: #3C45A5 !important;
+        transform: translateY(0);
+    }
+    </style>
 </head>
 <body class="discord-theme">
     <header class="main-header">
@@ -22,8 +40,13 @@
 
             <!-- Правая часть с кнопками -->
             <div class="col-md-6 text-end pe-5">
-                <a href="/login" class="auth-btn login-btn">Войти</a>
-                <a href="/register" class="auth-btn register-btn">Регистрация</a>
+                {% if 'username' in session %}
+                    <a href="/profile" class="auth-btn login-btn">Профиль</a>
+                    <a href="/logout" class="auth-btn register-btn">Выйти</a>
+                {% else %}
+                    <a href="/login" class="auth-btn login-btn">Войти</a>
+                    <a href="/register" class="auth-btn register-btn">Регистрация</a>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -108,11 +131,24 @@
 
             <!-- Правая сторона (контент) -->
             <div class="col-md-10 main-content">
-                <!-- Welcome-блок -->
-                <div class="welcome-header text-center py-5">
-                    <h2 class="welcome-title">Добро пожаловать на MusicHub</h2>
-                    <p class="welcome-subtitle">Ваша платформа для творческого самовыражения</p>
-                </div>
+                {% if 'username' in session %}
+                    <!-- Блок поиска и создания -->
+                    <div class="search-create-container py-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="text" class="form-control discord-search"
+                                   placeholder="Найти или создать публикацию...">
+                            <a href="/create-post" class="btn discord-btn primary">
+                                Новая публикация
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Welcome-блок для гостей -->
+                    <div class="welcome-header text-center py-5">
+                        <h2 class="welcome-title">Добро пожаловать на MusicHub</h2>
+                        <p class="welcome-subtitle">Ваша платформа для творческого самовыражения</p>
+                    </div>
+                {% endif %}
 
                 <!-- Будущие посты -->
                 <div class="posts-container p-4">

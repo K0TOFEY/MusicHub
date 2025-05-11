@@ -1,9 +1,11 @@
 from flask import render_template, redirect, url_for, flash, request, session
 from app import app, db
-from app.forms import RegistrationFormPersonal, RegistrationFormTags, LoginForm
+from app.forms import RegistrationFormPersonal, RegistrationFormTags, LoginForm, ProfileForm
 from app.models import User, Tag, UserTag
 from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename
 from flask_login import current_user, login_user, logout_user, login_required
+import os
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -11,7 +13,7 @@ def register():
     form_personal = RegistrationFormPersonal(prefix="personal")
     form_tags = RegistrationFormTags(prefix="tags")
 
-    # Заполняем choices для form_tags здесь, чтобы они были доступны при первом рендеринге и при повторной отправке формы
+    # Заполняем choices для form_tags здесь, чтобы они были доступны при первом рендеринге и при повторной отправкеформы
     form_tags.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
 
     if request.method == 'POST':
@@ -82,6 +84,7 @@ def register():
 
     return render_template('register.html', form=form_personal, form_tags=form_tags, step=1)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -101,7 +104,7 @@ def login():
 @app.route('/index')
 def index():
     if 'username' in session:  # Проверяем, есть ли username в сессии
-        return render_template('index.html', username=session['username'])  # Отображаем главную страницу с именем пользователя
+        return render_template('base.html', username=session['username'])  # Отображаем главную страницу с именем пользователя
     else:
         return render_template('base.html')  # Перенаправляем на страницу входа, если пользователь не залогинен
 
@@ -110,3 +113,30 @@ def index():
 def logout():
     session.pop('username', None) # Удаляем имя пользователя из сессии
     return redirect(url_for('index')) # Перенаправляем на страницу входа
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        # Обработка аватарки
+        if form.avatar.data:
+            filename = secure_filename(form.avatar.data.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            form.avatar.data.save(file_path)
+            current_user.avatar = filename
+
+        # Обновление информации
+        current_user.bio = form.bio.data
+        db.session.commit()
+        flash('Профиль обновлен', 'success')
+        return redirect(url_for('profile'))
+
+    return render_template('profile.html', form=form, user=current_user)
+
+
+@app.route('/create-post')
+@login_required
+def create_post():
+    return render_template('create_post.html')

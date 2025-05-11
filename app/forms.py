@@ -3,6 +3,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User, Tag
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import TextAreaField
 
 
 class RegistrationFormPersonal(FlaskForm):
@@ -39,3 +41,11 @@ class LoginForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
+
+
+class ProfileForm(FlaskForm):
+    bio = TextAreaField('Обо мне')
+    avatar = FileField('Аватар', validators=[
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Только изображения!')
+    ])
+    submit = SubmitField('Сохранить')
