@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from flask_login import current_user, login_user, logout_user, login_required
 import os
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form_personal = RegistrationFormPersonal(prefix="personal")
@@ -114,7 +115,7 @@ def profile():
             avatar_filename = secure_filename(form.avatar.data.filename)
             avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_filename)
             form.avatar.data.save(avatar_path)
-            current_user.avatar = 'img/' + avatar_filename  #Сохраняем путь к файлу
+            current_user.avatar = 'uploads/avatars' + avatar_filename  #Сохраняем путь к файлу
             flash('Аватар успешно обновлен', 'success')
 
         # Обработка "О себе"
@@ -122,8 +123,10 @@ def profile():
         flash('Информация о себе успешно обновлена', 'success')
 
         db.session.commit()
-        return redirect(url_for('profile'))
-
+        # Убираем редирект, чтобы страница не перезагружалась
+        # return redirect(url_for('profile'))
+        return render_template('profile.html', form=form) # Возвращаем тот же самый шаблон
+    form.bio.data = current_user.bio # Заполнение формы при GET-запросе
     return render_template('profile.html', form=form)
 
 @app.route('/create-post')

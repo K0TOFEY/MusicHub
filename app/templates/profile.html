@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль - MusicHub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/prof_style.css') }}">
 </head>
 <body class="discord-theme">
     <div class="profile-container">
         <div class="profile-header">
             <img src=""
-                 alt="Аватар" class="avatar">
+                 alt="Аватар" class="avatar" onclick="document.getElementById('avatarInput').click();">
             <div class="profile-info">
                 <div class="profile-name">{{ current_user.username }}</div>
             </div>
@@ -25,16 +25,15 @@
 
         <form method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
-            <div class="mb-3">
-                {{ form.avatar.label(class="form-label") }}
-                {{ form.avatar(class="form-control") }}
-            </div>
+
+            <input type="file" id="avatarInput" name="avatar" style="display:none;" onchange="updateFileName(this)">
+            <span id="file-name">Файл не выбран</span>
 
             <div class="mb-3">
                 {{ form.bio.label(class="form-label") }}
                 {{ form.bio(class="form-control", rows="3", placeholder="Расскажите о себе...") }}
             </div>
-            {{ form.submit(class="discord-btn primary") }}
+            <button type="submit" class="discord-btn primary">Сохранить изменения</button>
             <a href="{{ url_for('index') }}" class="discord-btn secondary">Вернуться на главную</a>
         </form>
 

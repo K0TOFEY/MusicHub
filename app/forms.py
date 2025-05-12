@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectMultipleField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from app.models import User
+
 
 class RegistrationFormPersonal(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -24,13 +25,16 @@ class RegistrationFormPersonal(FlaskForm):
 
 
 class RegistrationFormTags(FlaskForm):
+    tags = SelectMultipleField('Tags', coerce=int)
     submit_tags = SubmitField('Register')
+
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
 
 class ProfileForm(FlaskForm):
     avatar = FileField('Обновить аватар', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])

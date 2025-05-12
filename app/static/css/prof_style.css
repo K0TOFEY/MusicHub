@@ -1,103 +1,163 @@
-/* Общие стили */
-body {
+/* profile_style.css */
+
+body.discord-theme {
     background-color: #36393f;
     color: #dcddde;
-    font-family: 'Arial', sans-serif;
+    font-family: sans-serif;
 }
 
-.discord-theme {
-    background-color: #36393f;
-    color: #dcddde;
-}
-
-.discord-btn {
-    background-color: #4f5d71; /* Discord grey */
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s ease;
-}
-
-.discord-btn:hover {
-    opacity: 0.8;
-}
-
-.discord-btn.primary {
-    background-color: #5865f2; /* Discord blue */
-}
-
-.discord-btn.secondary {
-    background-color: #4f5d71;
-}
-
-/*  Стили для профиля  */
 .profile-container {
     width: 80%;
-    margin: 20px auto;
+    margin: 50px auto;
     background-color: #2f3136;
-    border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .profile-header {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #424549;
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     margin-right: 20px;
-    object-fit: cover;
-    border: 2px solid #4f545c; /*Border for the avatar*/
+    object-fit: cover; /* Ensures the image fills the circle */
+    border: 3px solid #7289da; /* Add a border around the avatar */
 }
 
 .profile-info {
-    flex-grow: 1;  /* Занимает все доступное пространство */
+    display: flex;
+    flex-direction: column;
 }
 
 .profile-name {
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-.profile-username {
-    color: #72767d;
-    font-size: 14px;
+.tags {
+    margin-bottom: 20px;
 }
 
 .tag-pill {
-    background-color: #4f545c;
+    background-color: #424549;
     color: #fff;
     padding: 5px 10px;
     border-radius: 20px;
     margin-right: 5px;
-    display: inline-block;
-    font-size: 12px;
-    margin-bottom: 5px;
+    font-size: 0.9em;
+    display: inline-block; /* Ensure pills are inline */
 }
 
-.about-me-text {
-    background-color: #202225;
+form {
+    margin-top: 20px;
+}
+
+.form-label {
+    color: #b9bbbe;
+    margin-bottom: 5px;
+    display: block; /* Ensures labels take up the full width */
+}
+
+.form-control {
+    background-color: #424549;
+    border: 1px solid #7289da;
+    color: #dcddde;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 15px;
+    width: 100%; /* Ensures the input fields take up the full width */
 }
 
-.back-button {
-    background-color: #7289da;
-    color: #fff;
-    padding: 10px 20px;
+.form-control:focus {
+    border-color: #7289da;
+    box-shadow: none;
+}
+
+/* Button styles */
+.discord-btn {
+    padding: 8px 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
+    font-size: 1em;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make it a block-level element */
+}
+
+.discord-btn.primary {
+    background-color: #7289da;
+    color: #fff;
+}
+
+.discord-btn.secondary {
+    background-color: #4f545c;
+    color: #fff;
+}
+
+.discord-btn.primary:hover {
+    background-color: #677bc4;
+}
+
+.discord-btn.secondary:hover {
+    background-color: #464b52;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .profile-container {
+        width: 95%;
+        margin: 20px auto;
+    }
+    .avatar {
+        width: 70px;
+        height: 70px;
+        margin-right: 10px;
+    }
+    .profile-name {
+        font-size: 1.2em;
+    }
+    .tag-pill {
+        padding: 4px 8px;
+        font-size: 0.8em;
+    }
+    .discord-btn {
+        font-size: 0.9em;
+        padding: 6px 12px;
+    }
+}
+
+
+.avatar-upload-btn:hover {
+    background-color: #677bc4;
+}
+
+.form-control-file {
+    display: none; /* Скрываем стандартный input file */
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+    border: 3px solid #7289da;
+    cursor: pointer; /* Изменяем курсор на "указатель" */
+    transition: transform 0.2s ease-in-out; /* Плавная анимация */
+}
+
+.avatar:hover {
+    transform: scale(1.1); /* Небольшое увеличение при наведении */
+    opacity: 0.8; /* Небольшая прозрачность при наведении */
 }
