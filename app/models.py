@@ -1,21 +1,14 @@
-# print('Здесь будут модели БД')
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    tags = db.relationship('Tag', secondary='user_tag', backref=db.backref('users', lazy='dynamic'))
-
-    # Доп. поля для профиля
-    avatar = db.Column(db.String(256))
-
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
+    avatar = db.Column(db.String(256), nullable=True)  # Путь к файлу аватара
+    bio = db.Column(db.String(256), nullable=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -23,6 +16,8 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,7 +25,6 @@ class Tag(db.Model):
 
     def __repr__(self):
         return f'<Tag {self.name}>'
-
 
 class UserTag(db.Model):
     id = db.Column(db.Integer, primary_key=True)

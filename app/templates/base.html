@@ -1,5 +1,3 @@
-<!-- Сайт с навигацией -->
-<!--<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">-->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -9,135 +7,135 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-    .discord-btn.primary {
-        background-color: #5865F2 !important;
-        color: white !important;
-        transition: all 0.2s ease;
-        border: none;
-    }
+        .discord-btn.primary {
+            background-color: #5865F2 !important;
+            color: white !important;
+            transition: all 0.2s ease;
+            border: none;
+        }
 
-    .discord-btn.primary:hover {
-        background-color: #4752C4 !important;
-        transform: translateY(-1px);
-    }
+        .discord-btn.primary:hover {
+            background-color: #4752C4 !important;
+            transform: translateY(-1px);
+        }
 
-    .discord-btn.primary:active {
-        background-color: #3C45A5 !important;
-        transform: translateY(0);
-    }
+        .discord-btn.primary:active {
+            background-color: #3C45A5 !important;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="discord-theme">
     <header class="main-header">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <!-- Левая часть с логотипом -->
-            <div class="col-md-6">
-                <div class="d-flex align-items-center ps-4">
-                    <h1 class="site-title mb-0">MusicHub</h1>
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <!-- Левая часть с логотипом -->
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center ps-4">
+                        <h1 class="site-title mb-0">MusicHub</h1>
+                    </div>
+                </div>
+
+                <!-- Правая часть с кнопками -->
+                <div class="col-md-6 text-end pe-5">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('profile') }}" class="auth-btn login-btn">Профиль</a>
+                        <a href="{{ url_for('logout') }}" class="auth-btn register-btn">Выйти</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="auth-btn login-btn">Войти</a>
+                        <a href="{{ url_for('register') }}" class="auth-btn register-btn">Регистрация</a>
+                    {% endif %}
                 </div>
             </div>
-
-            <!-- Правая часть с кнопками -->
-            <div class="col-md-6 text-end pe-5">
-                {% if 'username' in session %}
-                    <a href="/profile" class="auth-btn login-btn">Профиль</a>
-                    <a href="/logout" class="auth-btn register-btn">Выйти</a>
-                {% else %}
-                    <a href="/login" class="auth-btn login-btn">Войти</a>
-                    <a href="/register" class="auth-btn register-btn">Регистрация</a>
-                {% endif %}
-            </div>
         </div>
-    </div>
     </header>
 
     <div class="container-fluid">
         <div class="row">
             <!-- Левая панель (категории и фильтры) -->
             <nav class="col-md-2 sidebar">
-    <div class="sidebar-header p-3">
-        <h3 class="text-white">🎵 Категории</h3>
-    </div>
+                <div class="sidebar-header p-3">
+                    <h3 class="text-white">🎵 Категории</h3>
+                </div>
 
-    <!-- Музыкальные жанры -->
-    <div class="filters-section p-3">
-        <h4 class="text-white mb-3">Жанры</h4>
-        <ul class="nav flex-column">
-            <li class="nav-item channel">
-                <span class="nav-link">🎸 Рок</span>
-            </li>
-            <li class="nav-item channel">
-                <span class="nav-link">🎹 Электроника</span>
-            </li>
-            <li class="nav-item channel">
-                <span class="nav-link">🎻 Классика</span>
-            </li>
-            <li class="nav-item channel">
-                <span class="nav-link">🎤 Поп</span>
-            </li>
-        </ul>
-    </div>
+                <!-- Музыкальные жанры -->
+                <div class="filters-section p-3">
+                    <h4 class="text-white mb-3">Жанры</h4>
+                    <ul class="nav flex-column">
+                        <li class="nav-item channel">
+                            <span class="nav-link">🎸 Рок</span>
+                        </li>
+                        <li class="nav-item channel">
+                            <span class="nav-link">🎹 Электроника</span>
+                        </li>
+                        <li class="nav-item channel">
+                            <span class="nav-link">🎻 Классика</span>
+                        </li>
+                        <li class="nav-item channel">
+                            <span class="nav-link">🎤 Поп</span>
+                        </li>
+                    </ul>
+                </div>
 
-    <!-- Инструменты -->
-    <div class="filters-section p-3">
-        <h4 class="text-white mb-3">Инструменты</h4>
-        <ul class="nav flex-column">
-            <li class="nav-item channel">
-                <span class="nav-link">🎸 Гитара</span>
-            </li>
-            <li class="nav-item channel">
-                <span class="nav-link">🎹 Пианино</span>
-            </li>
-            <li class="nav-item channel">
-                <span class="nav-link">🥁 Барабаны</span>
-            </li>
-            <li class="nav-item channel">
-                <span class="nav-link">🎷 Саксофон</span>
-            </li>
-        </ul>
-    </div>
+                <!-- Инструменты -->
+                <div class="filters-section p-3">
+                    <h4 class="text-white mb-3">Инструменты</h4>
+                    <ul class="nav flex-column">
+                        <li class="nav-item channel">
+                            <span class="nav-link">🎸 Гитара</span>
+                        </li>
+                        <li class="nav-item channel">
+                            <span class="nav-link">🎹 Пианино</span>
+                        </li>
+                        <li class="nav-item channel">
+                            <span class="nav-link">🥁 Барабаны</span>
+                        </li>
+                        <li class="nav-item channel">
+                            <span class="nav-link">🎷 Саксофон</span>
+                        </li>
+                    </ul>
+                </div>
 
-    <!-- Фильтры -->
-    <div class="filters-section p-3">
-        <h4 class="text-white mb-3">Фильтры</h4>
-        <div class="form-check text-white">
-            <input class="form-check-input" type="checkbox" id="new">
-            <label class="form-check-label" for="new">Новые</label>
-        </div>
-        <div class="form-check text-white">
-            <input class="form-check-input" type="checkbox" id="popular">
-            <label class="form-check-label" for="popular">Популярные</label>
-        </div>
-        <div class="form-check text-white">
-            <input class="form-check-input" type="checkbox" id="lessons">
-            <label class="form-check-label" for="lessons">Уроки</label>
-        </div>
-    </div>
+                <!-- Фильтры -->
+                <div class="filters-section p-3">
+                    <h4 class="text-white mb-3">Фильтры</h4>
+                    <div class="form-check text-white">
+                        <input class="form-check-input" type="checkbox" id="new">
+                        <label class="form-check-label" for="new">Новые</label>
+                    </div>
+                    <div class="form-check text-white">
+                        <input class="form-check-input" type="checkbox" id="popular">
+                        <label class="form-check-label" for="popular">Популярные</label>
+                    </div>
+                    <div class="form-check text-white">
+                        <input class="form-check-input" type="checkbox" id="lessons">
+                        <label class="form-check-label" for="lessons">Уроки</label>
+                    </div>
+                </div>
 
-    <!-- Уровень мастерства -->
-    <div class="filters-section p-3">
-        <h4 class="text-white mb-3">Опыт</h4>
-        <div class="form-check text-white">
-            <input class="form-check-input" type="radio" name="experience" id="beginner">
-            <label class="form-check-label" for="beginner">Начинающий</label>
-        </div>
-        <div class="form-check text-white">
-            <input class="form-check-input" type="radio" name="experience" id="pro">
-            <label class="form-check-label" for="pro">Профессионал</label>
-        </div>
-    </div>
-    </nav>
+                <!-- Уровень мастерства -->
+                <div class="filters-section p-3">
+                    <h4 class="text-white mb-3">Опыт</h4>
+                    <div class="form-check text-white">
+                        <input class="form-check-input" type="radio" name="experience" id="beginner">
+                        <label class="form-check-label" for="beginner">Начинающий</label>
+                    </div>
+                    <div class="form-check text-white">
+                        <input class="form-check-input" type="radio" name="experience" id="pro">
+                        <label class="form-check-label" for="pro">Профессионал</label>
+                    </div>
+                </div>
+            </nav>
 
             <!-- Правая сторона (контент) -->
             <div class="col-md-10 main-content">
-                {% if 'username' in session %}
+                {% if current_user.is_authenticated %}
                     <!-- Блок поиска и создания -->
                     <div class="search-create-container py-4">
                         <div class="d-flex align-items-center gap-3">
                             <input type="text" class="form-control discord-search"
-                                   placeholder="Найти или создать публикацию...">
-                            <a href="/create-post" class="btn discord-btn primary">
+                                placeholder="Найти или создать публикацию...">
+                            <a href="{{ url_for('create_post') }}" class="btn discord-btn primary">
                                 Новая публикация
                             </a>
                         </div>

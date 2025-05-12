@@ -1,51 +1,38 @@
-# print("Здесь будет разработка форм (регистрации, вход, создание постов)")
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField, BooleanField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
-from app.models import User, Tag
-from flask_wtf.file import FileField, FileAllowed
-from wtforms import TextAreaField
-
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+from app.models import User
 
 class RegistrationFormPersonal(FlaskForm):
-    username = StringField('Имя пользователя', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    password2 = PasswordField('Подтвердите пароль',
-                              validators=[DataRequired(), EqualTo('password', message='Пароли должны совпадать')])
-    submit_personal = SubmitField('Далее')
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit_personal = SubmitField('Register')
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
-            raise ValidationError('Это имя пользователя уже занято.')
+            raise ValidationError('Please use a different username.')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
-            raise ValidationError('Этот email уже зарегистрирован.')
+            raise ValidationError('Please use a different email address.')
 
 
 class RegistrationFormTags(FlaskForm):
-    tags = SelectMultipleField('Выберите теги', coerce=int, validators=[DataRequired()],
-                                widget=None)  # Remove widget=SelectMultipleField
-    submit_tags = SubmitField('Зарегестрироваться')
-
-    def __init__(self, *args, **kwargs):
-        super(RegistrationFormTags, self).__init__(*args, **kwargs)
-        self.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
-
+    submit_tags = SubmitField('Register')
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    remember_me = BooleanField('Запомнить меня')
-    submit = SubmitField('Войти')
-
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Sign In')
 
 class ProfileForm(FlaskForm):
-    bio = TextAreaField('Обо мне')
-    avatar = FileField('Аватар', validators=[
-        FileAllowed(['jpg', 'png', 'jpeg'], 'Только изображения!')
-    ])
-    submit = SubmitField('Сохранить')
+    avatar = FileField('Обновить аватар', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    bio = TextAreaField('О себе')
+    submit = SubmitField('Сохранить изменения')
