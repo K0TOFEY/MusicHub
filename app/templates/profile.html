@@ -10,8 +10,8 @@
 <body class="discord-theme">
     <div class="profile-container">
         <div class="profile-header">
-            <img src=""
-                 alt="Аватар" class="avatar" onclick="document.getElementById('avatarInput').click();">
+            <img src="{{ url_for('static', filename=current_user.avatar or 'img/default_image.jpg') }}"
+     alt="Аватар" class="avatar" onclick="document.getElementById('avatarInput').click();">
             <div class="profile-info">
                 <div class="profile-name">{{ current_user.username }}</div>
             </div>
@@ -27,7 +27,6 @@
             {{ form.hidden_tag() }}
 
             <input type="file" id="avatarInput" name="avatar" style="display:none;" onchange="updateFileName(this)">
-            <span id="file-name">Файл не выбран</span>
 
             <div class="mb-3">
                 {{ form.bio.label(class="form-label") }}

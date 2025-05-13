@@ -105,6 +105,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -115,7 +116,8 @@ def profile():
             avatar_filename = secure_filename(form.avatar.data.filename)
             avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_filename)
             form.avatar.data.save(avatar_path)
-            current_user.avatar = 'uploads/avatars' + avatar_filename  #Сохраняем путь к файлу
+            # This line is very important: store the correct path
+            current_user.avatar = 'img/' + avatar_filename  #Сохраняем путь к файлу
             flash('Аватар успешно обновлен', 'success')
 
         # Обработка "О себе"
@@ -123,10 +125,8 @@ def profile():
         flash('Информация о себе успешно обновлена', 'success')
 
         db.session.commit()
-        # Убираем редирект, чтобы страница не перезагружалась
-        # return redirect(url_for('profile'))
-        return render_template('profile.html', form=form) # Возвращаем тот же самый шаблон
-    form.bio.data = current_user.bio # Заполнение формы при GET-запросе
+        return render_template('profile.html', form=form)
+    form.bio.data = current_user.bio
     return render_template('profile.html', form=form)
 
 @app.route('/create-post')
