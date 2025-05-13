@@ -1,0 +1,195 @@
+:root {
+    --discord-bg: #36393f;
+    --discord-secondary: #2f3136;
+    --discord-input: #40444b;
+    --discord-text: #dcddde;
+    --discord-primary: #5865f2;
+    --discord-primary-hover: #4752c4;
+    --discord-border: #202225;
+}
+
+.discord-theme {
+    background-color: var(--discord-bg);
+    color: var(--discord-text);
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+}
+
+.discord-post-container {
+    background-color: var(--discord-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--discord-border);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.discord-label {
+    color: var(--discord-text) !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.discord-input,
+.discord-textarea,
+.discord-file-input {
+    background-color: var(--discord-input) !important;
+    color: var(--discord-text) !important;
+    border-radius: 3px;
+    padding: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid var(--discord-primary) !important;
+}
+
+.discord-input:focus,
+.discord-textarea:focus {
+    box-shadow: 0 0 8px rgba(88, 101, 242, 0.4) !important;
+    border-color: var(--discord-primary-hover) !important;
+}
+
+.discord-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.discord-file-input {
+    border: 2px dashed var(--discord-primary) !important;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.discord-file-input:hover {
+    border-color: var(--discord-primary);
+    background-color: rgba(88, 101, 242, 0.1);
+}
+
+/* Кастомные чекбоксы для тегов */
+.discord-tag-check .form-check-input {
+    display: none;
+}
+
+.discord-tag-check .form-check-label {
+    background-color: var(--discord-input);
+    border-radius: 15px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid var(--discord-primary) !important;
+}
+
+.discord-tag-check .form-check-input:checked + .form-check-label {
+    background-color: var(--discord-primary);
+    border-color: var(--discord-primary-hover) !important;
+    color: white;
+}
+
+.discord-tag-check:hover .form-check-label {
+    background-color: #3a3d45;
+}
+
+/* Кнопки */
+.discord-btn.primary {
+    background-color: var(--discord-primary);
+    color: white !important;
+    border: 2px solid var(--discord-primary) !important;
+    padding: 10px 24px;
+    border-radius: 3px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.discord-btn.primary:hover {
+    background-color: var(--discord-primary-hover);
+    border-color: var(--discord-primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 0 8px rgba(88, 101, 242, 0.4);
+}
+
+.discord-btn.secondary {
+    background-color: #4f545c;
+    color: white !important;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.discord-btn.secondary:hover {
+    background-color: #686d73;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .discord-post-container {
+        margin: 0 10px;
+        padding: 20px;
+    }
+
+    .discord-file-input {
+        padding: 15px;
+    }
+}
+
+.file-preview-item {
+    background-color: var(--discord-input);
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.preview-image {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.file-name {
+    color: var(--discord-text);
+    font-size: 0.9em;
+}
+
+.file-icon {
+    font-size: 2em;
+    padding: 10px;
+}
+
+.non-image {
+    background-color: var(--discord-secondary);
+    border: 2px dashed var(--discord-primary);
+}
+
+.discord-tag-item {
+    position: relative;
+    margin: 2px;
+}
+
+.discord-tag-checkbox {
+    display: none;
+}
+
+.discord-tag-pill {
+    display: inline-block;
+    background-color: #40444b;
+    color: #dcddde;
+    padding: 6px 12px;
+    border-radius: 15px;
+    border: 2px solid #5865f2;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.discord-tag-checkbox:checked + .discord-tag-pill {
+    background-color: #5865f2;
+    color: white;
+    border-color: #4752c4;
+}
+
+.discord-tag-pill:hover {
+    background-color: #3a3d45;
+    transform: translateY(-1px);
+}

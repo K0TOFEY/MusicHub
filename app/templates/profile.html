@@ -18,9 +18,11 @@
         </div>
 
         <div class="tags">
-            <span class="tag-pill">Гитара</span>
-            <span class="tag-pill">Фортепиано</span>
-            <span class="tag-pill">Вокал</span>
+            {% for user_tag in current_user.user_tags %}
+                <span class="tag-pill">{{ user_tag.tag.name }}</span>
+            {% else %}
+                <span class="text-muted">Теги не выбраны</span>
+            {% endfor %}
         </div>
 
         <form method="POST" enctype="multipart/form-data">

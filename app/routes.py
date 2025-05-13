@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request, session
 from app import app, db
 from app.forms import RegistrationFormPersonal, RegistrationFormTags, LoginForm, ProfileForm
-from app.models import User, Tag, UserTag
+from app.models import User, Tag, UserTag, PostTag, Post
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from flask_login import current_user, login_user, logout_user, login_required
@@ -114,7 +114,7 @@ def profile():
         # Обработка аватара
         if form.avatar.data:
             avatar_filename = secure_filename(form.avatar.data.filename)
-            avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_filename)
+            avatar_path = os.path.join(app.config['AVATAR_UPLOAD_FOLDER'], avatar_filename)
             form.avatar.data.save(avatar_path)
             # This line is very important: store the correct path
             current_user.avatar = 'img/' + avatar_filename  #Сохраняем путь к файлу
@@ -129,7 +129,51 @@ def profile():
     form.bio.data = current_user.bio
     return render_template('profile.html', form=form)
 
-@app.route('/create-post')
+
+@app.route('/create-post', methods=['GET', 'POST'])
 @login_required
 def create_post():
-    return render_template('create_post.html')
+    tags = Tag.query.all()
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        content = request.form.get('content')
+        selected_tags = request.form.getlist('tags')  # Убедитесь, что name="tags" в форме
+
+        # Обработка файла
+        file = request.files['file']
+        file_path = None
+        if file and file.filename != '':
+            filename = secure_filename(file.filename)
+            upload_folder = app.config['POSTS_UPLOAD_FOLDER']
+            os.makedirs(upload_folder, exist_ok=True)
+            file_path = os.path.join('uploads', filename)
+            file.save(os.path.join(upload_folder, filename))
+
+        # Создание поста
+        new_post = Post(
+            title=title,
+            content=content,
+            file_path=file_path,
+            user_id=current_user.id
+        )
+
+        try:
+            db.session.add(new_post)
+            db.session.flush()  # Получаем ID поста
+
+            # Добавляем теги
+            for tag_id in selected_tags:
+                if Tag.query.get(tag_id):  # Проверяем существование тега
+                    post_tag = PostTag(post_id=new_post.id, tag_id=tag_id)
+                    db.session.add(post_tag)
+
+            db.session.commit()
+            flash('✅ Пост успешно создан!', 'success')
+            return redirect(url_for('index'))
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f'❌ Ошибка: {str(e)}', 'error')
+
+    return render_template('create_post.html', tags=tags)
