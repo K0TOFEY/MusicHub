@@ -50,6 +50,9 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # Добавляем связь с моделью User
+    author = db.relationship('User', backref=db.backref('posts', lazy=True))
+
     # Связь с тегами через промежуточную таблицу
     tags = db.relationship('Tag', secondary='post_tag', backref='posts')
 

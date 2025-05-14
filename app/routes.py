@@ -6,6 +6,12 @@ from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from flask_login import current_user, login_user, logout_user, login_required
 import os
+from datetime import datetime, timedelta
+
+
+# Проверка и создание папок при запуске
+os.makedirs(app.config['AVATAR_UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.config['POSTS_UPLOAD_FOLDER'], exist_ok=True)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -82,6 +88,7 @@ def register():
 
     return render_template('register.html', form=form_personal, form_tags=form_tags, step=1)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -94,10 +101,12 @@ def login():
             flash('Неверный email или пароль.', 'error')
     return render_template('login.html', form=form)
 
+
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('base.html')
+    posts = Post.query.all()  # Получаем все посты из базы данных
+    return render_template('base.html', posts=posts)
 
 @app.route('/logout')
 @login_required
@@ -117,7 +126,7 @@ def profile():
             avatar_path = os.path.join(app.config['AVATAR_UPLOAD_FOLDER'], avatar_filename)
             form.avatar.data.save(avatar_path)
             # This line is very important: store the correct path
-            current_user.avatar = 'img/' + avatar_filename  #Сохраняем путь к файлу
+            current_user.avatar = 'img/' + avatar_filename  # Сохраняем путь к файлу
             flash('Аватар успешно обновлен', 'success')
 
         # Обработка "О себе"
@@ -147,7 +156,7 @@ def create_post():
             filename = secure_filename(file.filename)
             upload_folder = app.config['POSTS_UPLOAD_FOLDER']
             os.makedirs(upload_folder, exist_ok=True)
-            file_path = os.path.join('uploads', filename)
+            file_path = os.path.join('uploads', filename).replace('\\', '/')
             file.save(os.path.join(upload_folder, filename))
 
         # Создание поста
@@ -155,7 +164,7 @@ def create_post():
             title=title,
             content=content,
             file_path=file_path,
-            user_id=current_user.id
+            author=current_user  # Используем current_user как автора
         )
 
         try:
@@ -177,3 +186,20 @@ def create_post():
             flash(f'❌ Ошибка: {str(e)}', 'error')
 
     return render_template('create_post.html', tags=tags)
+
+
+@app.template_filter('timeago')
+def timeago(date):
+    now = datetime.utcnow()
+    delta = now - date
+    if delta.days > 365:
+        return f"{delta.days // 365} г. назад"
+    if delta.days > 30:
+        return f"{delta.days // 30} мес. назад"
+    if delta.days > 0:
+        return f"{delta.days} д. назад"
+    if delta.seconds > 3600:
+        return f"{delta.seconds // 3600} ч. назад"
+    if delta.seconds > 60:
+        return f"{delta.seconds // 60} мин. назад"
+    return "только что"
