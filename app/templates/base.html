@@ -50,50 +50,37 @@
             <nav class="col-md-2 sidebar">
                 <div class="sidebar-header p-3">
                     <h3 class="text-white">🎵 Категории</h3>
+                    <a href="{{ url_for('index') }}" class="btn btn-sm btn-secondary mt-2">Сбросить фильтры</a>
                 </div>
+
+                <!-- Жанры -->
                 <div class="filters-section p-3">
                     <h4 class="text-white mb-3">Жанры</h4>
                     <ul class="nav flex-column">
-                        <li class="nav-item channel"><span class="nav-link">🎸 Рок</span></li>
-                        <li class="nav-item channel"><span class="nav-link">🎹 Электроника</span></li>
-                        <li class="nav-item channel"><span class="nav-link">🎻 Классика</span></li>
-                        <li class="nav-item channel"><span class="nav-link">🎤 Поп</span></li>
+                        {% for tag in ['Рок', 'Электроника', 'Классика', 'Поп'] %}
+                            <li class="nav-item channel">
+                                <a href="{{ url_for('index', tag=tag) }}"
+                                   class="nav-link {% if active_tag == tag %}active-filter{% endif %}">
+                                    {{ tag }}
+                                </a>
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
+
+                <!-- Инструменты -->
                 <div class="filters-section p-3">
                     <h4 class="text-white mb-3">Инструменты</h4>
                     <ul class="nav flex-column">
-                        <li class="nav-item channel"><span class="nav-link">🎸 Гитара</span></li>
-                        <li class="nav-item channel"><span class="nav-link">🎹 Пианино</span></li>
-                        <li class="nav-item channel"><span class="nav-link">🥁 Барабаны</span></li>
-                        <li class="nav-item channel"><span class="nav-link">🎷 Саксофон</span></li>
+                        {% for tag in ['Гитара', 'Пианино', 'Барабаны', 'Саксофон'] %}
+                            <li class="nav-item channel">
+                                <a href="{{ url_for('index', tag=tag) }}"
+                                   class="nav-link {% if active_tag == tag %}active-filter{% endif %}">
+                                    {{ tag }}
+                                </a>
+                            </li>
+                        {% endfor %}
                     </ul>
-                </div>
-                <div class="filters-section p-3">
-                    <h4 class="text-white mb-3">Фильтры</h4>
-                    <div class="form-check text-white">
-                        <input class="form-check-input" type="checkbox" id="new">
-                        <label class="form-check-label" for="new">Новые</label>
-                    </div>
-                    <div class="form-check text-white">
-                        <input class="form-check-input" type="checkbox" id="popular">
-                        <label class="form-check-label" for="popular">Популярные</label>
-                    </div>
-                    <div class="form-check text-white">
-                        <input class="form-check-input" type="checkbox" id="lessons">
-                        <label class="form-check-label" for="lessons">Уроки</label>
-                    </div>
-                </div>
-                <div class="filters-section p-3">
-                    <h4 class="text-white mb-3">Опыт</h4>
-                    <div class="form-check text-white">
-                        <input class="form-check-input" type="radio" name="experience" id="beginner">
-                        <label class="form-check-label" for="beginner">Начинающий</label>
-                    </div>
-                    <div class="form-check text-white">
-                        <input class="form-check-input" type="radio" name="experience" id="pro">
-                        <label class="form-check-label" for="pro">Профессионал</label>
-                    </div>
                 </div>
             </nav>
 
@@ -106,30 +93,30 @@
                         </div>
                     </div>
 
-                    <!-- Внутри блока с постами -->
                     <div class="posts-container p-4">
                         {% if posts %}
                             <div class="posts-grid">
                                 {% for post in posts %}
                                     <div class="post-card">
-                                        <!-- Заголовок -->
                                         <div class="post-header">
                                             <div class="post-meta">
-                                                <span class="post-author">{{ post.author.username }}</span>
+                                                <span class="post-author">
+                                                    {{ post.author.username }}
+                                                </span>
                                                 <span class="post-date">{{ post.created_at|timeago }}</span>
                                             </div>
                                             <h2 class="post-title">{{ post.title }}</h2>
                                         </div>
 
-                                        <!-- Контент -->
                                         <div class="post-content">
                                             {{ post.content|safe }}
                                             <div class="post-media">
                                                 {% if post.file_path %}
                                                     {% if post.file_path.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
                                                         <img src="{{ url_for('static', filename=post.file_path) }}"
-                                                            class="post-image"
-                                                            alt="Изображение">
+                                                             class="post-image"
+                                                             alt="Изображение"
+                                                             style="cursor: pointer">
                                                     {% elif post.file_path.lower().endswith(('.mp3', '.wav', '.ogg')) %}
                                                         <audio controls class="post-audio">
                                                             <source src="{{ url_for('static', filename=post.file_path) }}">
@@ -141,6 +128,8 @@
                                     </div>
                                 {% endfor %}
                             </div>
+                        {% else %}
+                            <p class="text-white">Нет публикаций по выбранному фильтру</p>
                         {% endif %}
                     </div>
                 {% else %}
@@ -152,5 +141,42 @@
             </div>
         </div>
     </div>
+
+    <!-- Модальное окно -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div class="modal-footer">
+            <a id="downloadLink" class="download-btn">Скачать</a>
+        </div>
+    </div>
+
+    <script>
+        // Открытие модалки
+        document.querySelectorAll('.post-image').forEach(img => {
+            img.onclick = function() {
+                const modal = document.getElementById("imageModal");
+                const modalImg = document.getElementById("modalImage");
+                const downloadLink = document.getElementById("downloadLink");
+
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                downloadLink.href = this.src;
+                downloadLink.download = this.alt || 'image';
+            }
+        });
+
+        // Закрытие модалки
+        document.querySelector('.close').onclick = () => {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        // Закрытие по клику вне области
+        window.onclick = (event) => {
+            if (event.target.classList.contains('modal')) {
+                document.getElementById("imageModal").style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>

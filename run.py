@@ -11,7 +11,8 @@ def make_shell_context():
 if __name__ == '__main__':
     with app.app_context():
         if Tag.query.count() == 0:
-            tags = ['Ноты', 'Гитара', 'Фортепиано', 'Ударные', 'Вокал']
+            tags = ['Рок', 'Электроника', 'Классика', 'Поп',
+                    'Гитара', 'Пианино', 'Барабаны', 'Саксофон']
             for tag_name in tags:
                 tag = Tag(name=tag_name)
                 db.session.add(tag)

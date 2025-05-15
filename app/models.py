@@ -56,6 +56,10 @@ class Post(db.Model):
     # Связь с тегами через промежуточную таблицу
     tags = db.relationship('Tag', secondary='post_tag', backref='posts')
 
+    @property
+    def tag_names(self):
+        return [tag.name for tag in self.tags]
+
 
 class PostTag(db.Model):
     id = db.Column(db.Integer, primary_key=True)

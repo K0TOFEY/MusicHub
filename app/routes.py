@@ -103,10 +103,17 @@ def login():
 
 
 @app.route('/')
-@app.route('/index')
 def index():
-    posts = Post.query.all()  # Получаем все посты из базы данных
-    return render_template('base.html', posts=posts)
+    tag_filter = request.args.get('tag')
+    page = request.args.get('page', 1, type=int)
+
+    query = Post.query
+    if tag_filter:
+        query = query.join(PostTag).join(Tag).filter(Tag.name == tag_filter)
+
+    posts = query.order_by(Post.created_at.desc()).paginate(page=page, per_page=9)
+
+    return render_template('base.html', posts=posts, active_tag=tag_filter)
 
 @app.route('/logout')
 @login_required
