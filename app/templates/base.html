@@ -88,7 +88,14 @@
                 {% if current_user.is_authenticated %}
                     <div class="search-create-container py-4">
                         <div class="d-flex align-items-center gap-3">
-                            <input type="text" class="form-control discord-search" placeholder="Найти или создать публикацию...">
+                            <form method="GET" action="{{ url_for('index') }}" class="d-flex w-100">
+                                <input type="text"
+                                       class="form-control discord-search"
+                                       name="search_query"
+                                       placeholder="Найти по названию..."
+                                       value="{{ request.args.get('search_query', '') }}">
+                                <button type="submit" class="btn discord-btn primary ms-2">Поиск</button>
+                            </form>
                             <a href="{{ url_for('create_post') }}" class="btn discord-btn primary">Новая публикация</a>
                         </div>
                     </div>
