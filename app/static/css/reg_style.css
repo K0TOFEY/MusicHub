@@ -1,0 +1,190 @@
+:root {
+    --discord-dark: #36393f;
+    --discord-blurple: #5865f2;
+    --discord-text: #dcddde;
+    --discord-border: #202225;
+}
+
+body.discord-theme {
+    background-color: var(--discord-dark);
+    color: var(--discord-text);
+    font-family: 'Whitney', 'Helvetica Neue', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.registration-container {
+    background-color: #2f3136;
+    width: 480px;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 2rem;
+}
+
+.input-group {
+    margin-bottom: 1.2rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #b9bbbe;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    background-color: #202225;
+    border: 1px solid var(--discord-border);
+    border-radius: 3px;
+    color: var(--discord-text);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+    border-color: var(--discord-blurple);
+    outline: none;
+}
+
+.discord-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 1rem;
+    background-color: var(--discord-blurple);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.discord-btn:hover {
+    background-color: #4752c4;
+}
+
+.discord-links p {
+    color: var(--discord-text) !important;
+    cursor: pointer;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 2rem 0;
+}
+
+.category-item {
+    position: relative;
+}
+
+.category-checkbox {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.category-card {
+    background: #40444b;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: block;
+    text-align: center;
+}
+
+.category-checkbox:checked + .category-card {
+    border: 2px solid var(--discord-blurple);
+    box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.3);
+}
+
+.category-card:hover {
+    background: #36393f;
+}
+
+.category-checkbox:focus + .category-card,
+.category-checkbox:active + .category-card {
+    outline: none;
+    border: 2px solid #36393f;
+}
+
+.category-card {
+    border: 2px solid transparent;
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Цвет обводки */
+.category-card.selected {
+    border-color: #7289da;
+}
+
+.input-group input.error {
+    border: 1px solid #dc3545 !important;
+}
+
+.errors {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+}
+
+.hidden-checkbox {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+/* Стили для карточки тега */
+.category-card {
+    background: #40444b;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    text-align: center;
+}
+
+/* Эффект при наведении */
+.category-card:hover {
+    background: #36393f;
+    transform: translateY(-2px);
+}
+
+/* Стиль для выбранного тега */
+.hidden-checkbox:checked + .category-card {
+    border-color: #7289da;
+    box-shadow: 0 0 0 2px rgba(114, 137, 218, 0.3);
+    background: #36393f;
+}
+
+/* Анимация при выборе */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(114, 137, 218, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(114, 137, 218, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(114, 137, 218, 0); }
+}
+
+.hidden-checkbox:checked + .category-card {
+    animation: pulse 0.5s ease-out;
+}

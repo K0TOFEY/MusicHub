@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .discord-btn.primary {
+            background-color: #5865F2 !important;
+            color: white !important;
+            transition: all 0.2s ease;
+            border: none;
+        }
+        .discord-btn.primary:hover {
+            background-color: #4752C4 !important;
+            transform: translateY(-1px);
+        }
+        .discord-btn.primary:active {
+            background-color: #3C45A5 !important;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="discord-theme">
+    <header class="main-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center ps-4">
+                        <h1 class="site-title mb-0">MusicHub</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end pe-5">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('profile') }}" class="auth-btn login-btn">Профиль</a>
+                        <a href="{{ url_for('logout') }}" class="auth-btn register-btn">Выйти</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="auth-btn login-btn">Войти</a>
+                        <a href="{{ url_for('register') }}" class="auth-btn register-btn">Регистрация</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 sidebar">
+                <div class="sidebar-header p-3">
+                    <h3 class="text-white">🎵 Категории</h3>
+                    <a href="{{ url_for('index') }}" class="btn btn-sm btn-secondary mt-2">Сбросить фильтры</a>
+                </div>
+
+                <!-- Жанры -->
+                <div class="filters-section p-3">
+                    <h4 class="text-white mb-3">Жанры</h4>
+                    <ul class="nav flex-column">
+                        {% for tag in ['Рок', 'Электроника', 'Классика', 'Поп'] %}
+                            <li class="nav-item channel">
+                                <a href="{{ url_for('index', tag=tag) }}"
+                                   class="nav-link {% if active_tag == tag %}active-filter{% endif %}">
+                                    {{ tag }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Инструменты -->
+                <div class="filters-section p-3">
+                    <h4 class="text-white mb-3">Инструменты</h4>
+                    <ul class="nav flex-column">
+                        {% for tag in ['Гитара', 'Пианино', 'Барабаны', 'Саксофон'] %}
+                            <li class="nav-item channel">
+                                <a href="{{ url_for('index', tag=tag) }}"
+                                   class="nav-link {% if active_tag == tag %}active-filter{% endif %}">
+                                    {{ tag }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="col-md-10 main-content">
+                {% if current_user.is_authenticated %}
+                    <div class="search-create-container py-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <form method="GET" action="{{ url_for('index') }}" class="d-flex w-100">
+                                <input type="text"
+                                       class="form-control discord-search"
+                                       name="search_query"
+                                       placeholder="Найти по названию..."
+                                       value="{{ request.args.get('search_query', '') }}">
+                                <button type="submit" class="btn discord-btn primary ms-2">Поиск</button>
+                            </form>
+                            <a href="{{ url_for('create_post') }}" class="btn discord-btn primary">Новая публикация</a>
+                        </div>
+                    </div>
+
+                    <div class="posts-container p-4">
+                        {% if posts %}
+                            <div class="posts-grid">
+                                {% for post in posts %}
+                                    <div class="post-card">
+                                        <div class="post-header">
+                                            <div class="post-meta">
+                                                <span class="post-author">
+                                                    {{ post.author.username }}
+                                                </span>
+                                                <span class="post-date">{{ post.created_at|timeago }}</span>
+                                            </div>
+                                            <h2 class="post-title">{{ post.title }}</h2>
+                                        </div>
+
+                                        <div class="post-content">
+                                            {{ post.content|safe }}
+                                            <div class="post-media">
+                                                {% if post.file_path %}
+                                                    {% if post.file_path.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
+                                                        <img src="{{ url_for('static', filename=post.file_path) }}"
+                                                             class="post-image"
+                                                             alt="Изображение"
+                                                             style="cursor: pointer">
+                                                    {% elif post.file_path.lower().endswith(('.mp3', '.wav', '.ogg')) %}
+                                                        <audio controls class="post-audio">
+                                                            <source src="{{ url_for('static', filename=post.file_path) }}">
+                                                        </audio>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-white">Нет публикаций по выбранному фильтру</p>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="welcome-header text-center py-5">
+                        <h2 class="welcome-title">Добро пожаловать на MusicHub</h2>
+                        <p class="welcome-subtitle">Ваша платформа для творческого самовыражения</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div class="modal-footer">
+            <a id="downloadLink" class="download-btn">Скачать</a>
+        </div>
+    </div>
+
+    <script>
+        // Открытие модалки
+        document.querySelectorAll('.post-image').forEach(img => {
+            img.onclick = function() {
+                const modal = document.getElementById("imageModal");
+                const modalImg = document.getElementById("modalImage");
+                const downloadLink = document.getElementById("downloadLink");
+
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                downloadLink.href = this.src;
+                downloadLink.download = this.alt || 'image';
+            }
+        });
+
+        // Закрытие модалки
+        document.querySelector('.close').onclick = () => {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        // Закрытие по клику вне области
+        window.onclick = (event) => {
+            if (event.target.classList.contains('modal')) {
+                document.getElementById("imageModal").style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
