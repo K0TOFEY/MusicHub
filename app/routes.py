@@ -33,7 +33,7 @@ def register():
         elif 'submit_tags' in request.form:
             # Создаем новую форму на основе данных запроса
             form_tags = RegistrationFormTags(request.form, prefix="tags")
-            form_tags.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]  # <-- Убедитесь, что это здесь
+            form_tags.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
 
             if request.form.getlist('tags'):
                 selected_tag_ids = request.form.getlist('tags')
@@ -118,6 +118,7 @@ def index():
     posts = query.order_by(Post.created_at.desc()).paginate(page=page, per_page=9)
     return render_template('base.html', posts=posts, active_tag=tag_filter)
 
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -135,7 +136,6 @@ def profile():
             avatar_filename = secure_filename(form.avatar.data.filename)
             avatar_path = os.path.join(app.config['AVATAR_UPLOAD_FOLDER'], avatar_filename)
             form.avatar.data.save(avatar_path)
-            # This line is very important: store the correct path
             current_user.avatar = 'img/' + avatar_filename  # Сохраняем путь к файлу
             flash('Аватар успешно обновлен', 'success')
 
@@ -157,7 +157,7 @@ def create_post():
     if request.method == 'POST':
         title = request.form.get('title')
         content = request.form.get('content')
-        selected_tags = request.form.getlist('tags')  # Убедитесь, что name="tags" в форме
+        selected_tags = request.form.getlist('tags')
 
         # Обработка файла
         file = request.files['file']

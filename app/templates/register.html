@@ -12,8 +12,8 @@
         {% if step == 1 %}
             <!-- Шаг 1: Основные данные -->
             <h1>Создайте аккаунт</h1>
-            <form method="POST" action=""> <!-- Убираем /register из action -->
-                {{ form.hidden_tag() }}  <!-- Добавляем CSRF-токен -->
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
 
                 <div class="input-group">
                     <label for="{{ form.email.id }}">Эл. почта</label>

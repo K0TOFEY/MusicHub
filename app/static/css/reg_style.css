@@ -131,11 +131,11 @@ h1 {
     cursor: pointer;
 }
 
+/* Цвет обводки */
 .category-card.selected {
-    border-color: #7289da; /* Цвет обводки */
+    border-color: #7289da;
 }
 
-/* Добавьте в reg_style.css */
 .input-group input.error {
     border: 1px solid #dc3545 !important;
 }
@@ -146,7 +146,6 @@ h1 {
     margin-top: 0.25rem;
 }
 
-/* Скрываем настоящий чекбокс */
 .hidden-checkbox {
     position: absolute;
     opacity: 0;
